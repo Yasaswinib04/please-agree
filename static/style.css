@@ -179,6 +179,12 @@ header {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   white-space: nowrap;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 130ms ease;
+}
+.brain-label:hover {
+  border-bottom-color: var(--accent);
 }
 
 #kitSel {

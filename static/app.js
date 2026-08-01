@@ -367,11 +367,78 @@ async function routeFromHash() {
       renderPipeline(); renderDetail();
       return true;
     } catch (err) { toast(`Couldn't load pinned school: ${esc(err.message)}`, 6000); }
+  } else if (parts[0] === 'brain' && parts[1]) {
+    await renderBrain(parts[1]);
+    return true;
   } else if (parts[0] === 'crm') {
     crmMode = true; $('crmBtn')?.classList.add('on'); renderCRM();
     return true;
   }
   return false;
+}
+
+// ---- GTM Brain viewer — read-only view of the kit artifacts the agent runs on ----
+function openBrain() { renderBrain(activeKitName || 'yomnita'); }
+
+async function renderBrain(name) {
+  const el = $('detail');
+  el.innerHTML = '<p class="empty">Loading GTM Brain…</p>';
+  try {
+    const k = await api(`/api/kits/${encodeURIComponent(name)}/files`);
+    selected = null; discovery = null; rejecting = null;
+    crmMode = false; $('crmBtn')?.classList.remove('on');
+    renderPipeline();
+    const f = k.files || {};
+    const parse = t => { try { return JSON.parse(t); } catch { return null; } };
+    const sect = (num, title, hint) => `
+      <div class="section-marker" style="margin:26px 0 10px"><span class="marker-num">${num}</span><span class="marker-title">${title}</span>
+      ${hint ? `<span class="hint" style="margin:0">${hint}</span>` : ''}</div>`;
+
+    const scoring = parse(f['scoring.json'] || '');
+    const angles = parse(f['followup_angles.json'] || '');
+    const brand = parse(f['brand.json'] || '');
+
+    el.innerHTML = `
+      <div class="detail-head">
+        <div>
+          <h2>GTM Brain <span class="city">· ${esc(k.label)}</span></h2>
+          <span class="hint">kits/${esc(k.name)}/ — everything product-specific the agent uses: research focus, scoring model, sender voice, outreach angles, deck brand and MOU clauses. Swap the kit, swap the whole GTM.</span>
+        </div>
+      </div>
+
+      ${f['voice.md'] ? `${sect('01', 'Sender voice', 'voice.md — the anti-generic guardrail: every draft must sound like this person')}
+        <div class="md">${md(f['voice.md'])}</div>` : ''}
+
+      ${f['brand_kit.md'] ? `${sect('02', 'Brand kit & proof', 'brand_kit.md — positioning, evidence tiers, what the agent may and may not claim')}
+        <div class="md">${md(f['brand_kit.md'])}</div>` : ''}
+
+      ${scoring ? `${sect('03', 'ICP scoring model', 'scoring.json — the dimensions every school is scored on')}
+        ${scoring.icp_note ? `<div class="angle-box"><b>ICP</b><p>${esc(scoring.icp_note)}</p></div>` : ''}
+        ${(scoring.dimensions || []).map(d => `<div class="followup">
+          <div class="fh"><span>${esc(d.label || d.key)}</span></div>
+          <span style="font-size:13px">${esc(d.guidance || '')}</span></div>`).join('')}` : ''}
+
+      ${Array.isArray(angles) ? `${sect('04', 'Follow-up angle library', 'followup_angles.json — each of the 7 touches must use a different angle, never a plain reminder')}
+        ${angles.map((a, i) => `<div class="followup">
+          <div class="fh"><span>${i + 1} · ${esc(a.name || a.key)}</span></div>
+          <span style="font-size:13px">${esc(a.hint || '')}</span></div>`).join('')}` : ''}
+
+      ${brand ? `${sect('05', 'Deck brand', 'brand.json — colours, font and logo applied to every generated deck')}
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px">
+          ${['primary', 'accent', 'bg', 'text'].filter(x => brand[x]).map(x => `<span class="chip" style="border-color:${esc(brand[x])};color:var(--text)"><span style="display:inline-block;width:10px;height:10px;background:${esc(brand[x])};margin-right:6px;vertical-align:-1px"></span>${x} ${esc(brand[x])}</span>`).join('')}
+        </div>
+        <p class="hint">Font: <b>${esc(brand.font || '–')}</b>${brand.vibe ? ` · Vibe: ${esc(brand.vibe)}` : ''}</p>` : ''}
+
+      ${f['mou_template.md'] ? `${sect('06', 'MOU clause library', 'mou_template.md — fixed clauses stay verbatim; only school placeholders are filled')}
+        <details><summary style="cursor:pointer;color:var(--accent-text);font-size:12.5px">Show template</summary>
+        <div class="md">${md(f['mou_template.md'])}</div></details>` : `${sect('06', 'MOU clause library', 'no kit-specific template — MOUs fall back to the default (Yomnita) template')}`}`;
+
+    const h = `#/brain/${name}`;
+    _lastWrittenHash = h;
+    if (location.hash !== h) history.replaceState(null, '', h);
+  } catch (err) {
+    el.innerHTML = `<p class="empty">Couldn't load GTM Brain for "${esc(name)}" — ${esc(err.message)}</p>`;
+  }
 }
 
 window.addEventListener('hashchange', () => { if (location.hash !== _lastWrittenHash) routeFromHash(); });

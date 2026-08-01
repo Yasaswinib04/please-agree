@@ -230,6 +230,29 @@ def get_kits():
     return {"kits": list_kits(), "active": active_kit()["name"]}
 
 
+KIT_VIEWABLE_FILES = ["brand_kit.md", "voice.md", "scoring.json", "followup_angles.json",
+                      "mou_template.md", "brand.json", "meta.json"]
+
+
+@app.get("/api/kits/{name}/files")
+def get_kit_files(name: str):
+    """Read-only view of a kit's GTM Brain artifacts (whitelisted filenames only) —
+    lets the UI show voice.md, brand_kit.md etc. without any file paths in the client."""
+    if not re.fullmatch(r"[a-z0-9-]{1,40}", name) or not (KITS / name / "brand_kit.md").exists():
+        raise HTTPException(404, "kit not found")
+    meta = {k["name"]: k for k in list_kits()}.get(name, {})
+    files = {}
+    for fname in KIT_VIEWABLE_FILES:
+        path = KITS / name / fname
+        if path.exists():
+            try:
+                files[fname] = path.read_text()
+            except Exception:
+                pass
+    return {"name": name, "label": meta.get("label", name), "emoji": meta.get("emoji", ""),
+            "product": meta.get("product", name), "files": files}
+
+
 @app.post("/api/kits/activate")
 def activate_kit(body: KitIn):
     if not (KITS / body.name / "brand_kit.md").exists():
@@ -341,6 +364,14 @@ def _schools_for_kit(kit: str | None) -> list:
 @app.get("/api/schools")
 def list_schools(kit: str | None = None):
     return _schools_for_kit(kit)
+
+
+@app.get("/api/schools/{school_id}")
+def get_school_direct(school_id: str):
+    """Unscoped direct fetch — deliberately ignores the active-kit filter so a pinned browser
+    tab (URL hash deep link) can always load its school regardless of which kit is globally
+    active or what other tabs are doing."""
+    return get_school(load_db(), school_id)
 
 
 @app.get("/api/export.csv")
