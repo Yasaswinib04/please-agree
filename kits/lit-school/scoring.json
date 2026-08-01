@@ -1,0 +1,25 @@
+{
+  "icp_note": "Colleges, universities, or career centers serving students (post-12th or undergrad) who want practical marketing/content/entrepreneurship skills and value portfolio-building over traditional degrees.",
+  "dimensions": [
+    {
+      "key": "student_profile_fit",
+      "label": "Student profile fit",
+      "guidance": "High: institution serves students interested in marketing, content, startups, or non-traditional careers; students value skills over grades. Low: institution focused on traditional academic paths (medicine, law, engineering theory) with no appetite for experiential learning."
+    },
+    {
+      "key": "partnership_openness",
+      "label": "Partnership openness",
+      "guidance": "High: institution actively seeks industry tie-ups, co-curricular programs, or alternative credentials; leadership is innovative. Low: rigid curriculum, no appetite for external programs, or views non-degree offerings as competitive threats."
+    },
+    {
+      "key": "placement_pressure",
+      "label": "Placement pressure",
+      "guidance": "High: institution struggles with graduate employability, faces parent/student pressure for job outcomes, or has weak industry connections. Low: strong placement record already, or students pursue further study rather than jobs."
+    },
+    {
+      "key": "budget_and_scale",
+      "label": "Budget & scale potential",
+      "guidance": "High: large student cohorts (500+ in target demographic), budget for partnerships or co-branded programs, willingness to pilot. Low: small institution, tight budgets, or no mechanism to fund/promote external programs."
+    }
+  ]
+}

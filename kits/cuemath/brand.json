@@ -1,0 +1,26 @@
+{
+  "primary": "#ffba07",
+  "accent": "#1f42ff",
+  "bg": "#1a1a0f",
+  "text": "#ffffff",
+  "font": "Untitled Sans",
+  "logo": "https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg",
+  "vibe": "playful, confident, vibrant, approachable, math-positive",
+  "scraped": {
+    "colors": [
+      "#ffba07",
+      "#00e573",
+      "#33ccff",
+      "#ff80f4",
+      "#1f42ff",
+      "#3594d4"
+    ],
+    "fonts": [
+      "Untitled Sans Regular",
+      "Athletics-Black",
+      "Untitled Sans Medium"
+    ],
+    "logo": "https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg",
+    "theme_color": "#FFBA07"
+  }
+}

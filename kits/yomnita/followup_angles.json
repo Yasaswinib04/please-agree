@@ -1,0 +1,9 @@
+[
+  {"key": "student_outcome", "name": "Student outcome story", "hint": "Lead with a concrete outcome: faster results for students, per-question feedback a teacher couldn't produce by hand."},
+  {"key": "workshop_offer", "name": "Free exam-analysis workshop", "hint": "Offer to run Yomnita on ONE recent exam's answer sheets free and present the insights to their academic team."},
+  {"key": "industry_insight", "name": "Industry insight", "hint": "A teacher-workload / correction-burden data point relevant to their board and exam calendar."},
+  {"key": "event_invite", "name": "Event or webinar invite", "hint": "Invite to a principals' roundtable / live demo webinar with peer schools."},
+  {"key": "case_study", "name": "Case study", "hint": "A comparable school's experience with Yomnita (pilot results, teacher quotes)."},
+  {"key": "cohort_deadline", "name": "Time-sensitive pilot cohort", "hint": "Limited seats in this term's free pilot cohort; aligned to their next exam cycle."},
+  {"key": "peer_proof", "name": "Peer social proof", "hint": "What principals of similar schools in their city/region are exploring; fear of falling behind peers."}
+]

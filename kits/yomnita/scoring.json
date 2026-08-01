@@ -1,0 +1,9 @@
+{
+  "icp_note": "Decent-fee private K-12 schools; State-syllabus schools are an underserved wedge; both CBSE and State are good targets.",
+  "dimensions": [
+    {"key": "syllabus_fit", "label": "Syllabus fit", "guidance": "State-syllabus schools score HIGH (underserved by CBSE-first tools) but strong CBSE schools are also good targets."},
+    {"key": "grading_volume", "label": "Grading volume", "guidance": "More students/sections/exams = higher correction burden = higher score."},
+    {"key": "ability_to_pay", "label": "Ability to pay", "guidance": "Fee band and facilities signal budget for tooling."},
+    {"key": "decision_maker_access", "label": "DM access", "guidance": "Named principal/correspondent with reachable contact info = higher."}
+  ]
+}

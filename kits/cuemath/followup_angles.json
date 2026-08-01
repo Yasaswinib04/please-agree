@@ -1,0 +1,30 @@
+[
+  {
+    "name": "remedial_intervention_cohort",
+    "description": "Offer a school-subsidized pilot targeting 15-20 struggling students (below grade level) with 1:1 tutoring for 12 weeks, measuring pre/post assessment gains and teacher-reported classroom improvement."
+  },
+  {
+    "name": "competition_prep_enrichment",
+    "description": "Partner with school's gifted program or math club to provide advanced 1:1 coaching for students preparing for Math Olympiad, AMC, or other competitions — position as extending what teachers can't resource."
+  },
+  {
+    "name": "homework_help_after_school",
+    "description": "Integrate Cuemath as a structured after-school homework help program where students get 1:1 support on assignments, reducing incomplete homework and parent frustration — pilot with parent-funded model."
+  },
+  {
+    "name": "teacher_referral_pathway",
+    "description": "Create a referral system where teachers identify students needing extra support; school shares Cuemath info with parents, and teachers get progress reports via parent app to close the loop — builds teacher buy-in."
+  },
+  {
+    "name": "summer_bridge_program",
+    "description": "Offer Cuemath as a summer learning option to prevent 'summer slide' in math, especially for students moving to middle school or who struggled during the year — less disruptive than school-year launch."
+  },
+  {
+    "name": "parent_info_session_pilot",
+    "description": "Run a free parent webinar (hosted by school) explaining MathFit philosophy and offering discounted trial for school families — lets school offer value without budget commitment, builds demand organically."
+  },
+  {
+    "name": "data_sharing_partnership",
+    "description": "Propose a research partnership where Cuemath shares anonymized progress data with school's math department to inform curriculum adjustments — positions Cuemath as a diagnostic tool, not just a service."
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "icp_note": "K-8 schools (public, private, charter) with parent communities able to fund enrichment OR schools with budget for targeted intervention/remedial support; math achievement gaps or competition prep needs.",
+  "dimensions": [
+    {
+      "key": "math_achievement_gap",
+      "label": "Math Achievement Gap",
+      "guidance": "HIGH: School has visible gaps (remedial programs, low test scores, high % struggling students). LOW: Math scores are strong and uniform across student body."
+    },
+    {
+      "key": "parent_willingness_to_pay",
+      "label": "Parent Willingness to Pay",
+      "guidance": "HIGH: Affluent community, parents already pay for tutoring/enrichment, active PTA. LOW: Title I school, low-income families, no history of paid extracurriculars."
+    },
+    {
+      "key": "school_openness_to_partners",
+      "label": "Openness to External Partners",
+      "guidance": "HIGH: School uses outside vendors (tutoring, SEL, test prep), principal/admin are innovation-friendly. LOW: Insular culture, distrust of edtech, teacher union resistance to external programs."
+    },
+    {
+      "key": "competition_math_culture",
+      "label": "Competition/Advanced Math Culture",
+      "guidance": "HIGH: School has Math Olympiad teams, gifted programs, parents push for advanced learning. LOW: No competitive math participation, focus is purely remedial or grade-level."
+    }
+  ]
+}

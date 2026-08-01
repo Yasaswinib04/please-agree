@@ -1,0 +1,26 @@
+{
+  "primary": "#0047ff",
+  "accent": "#fff000",
+  "bg": "#0a0a0a",
+  "text": "#ffffff",
+  "font": "BricolageGrotesque",
+  "logo": "https://www.litschool.in/_next/image?url=https%3A%2F%2Fijhwwsiwlmplkzktgcmv.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2FMisc.%2Flit%2520logo.png&w=3840&q=75",
+  "vibe": "bold, electric, high-contrast, youthful energy",
+  "scraped": {
+    "colors": [
+      "#0047ff",
+      "#fff000",
+      "#1488ff",
+      "#ff791f",
+      "#41df82",
+      "#fa69e5"
+    ],
+    "fonts": [
+      "Playfair Display",
+      "OpenSauceOne",
+      "BricolageGrotesque"
+    ],
+    "logo": "https://www.litschool.in/_next/image?url=https%3A%2F%2Fijhwwsiwlmplkzktgcmv.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2FMisc.%2Flit%2520logo.png&w=3840&q=75",
+    "theme_color": null
+  }
+}

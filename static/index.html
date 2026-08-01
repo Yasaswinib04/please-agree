@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yomnita Partnerships Agent</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;600;700&family=Chivo+Mono:wght@400;500;600&family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/static/style.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="brand-block">
+    <div class="brand-title">
+      <h1 id="appTitle">School Partnerships Agent</h1>
+      <span class="desk-badge">Partnership desk</span>
+    </div>
+    <p class="sub">School GTM: live research → scored dossier → personalized outreach → tracked follow-ups → meeting → MOU</p>
+  </div>
+  <div class="header-controls">
+    <div class="gtm-brain-select">
+      <span class="brain-label">GTM Brain</span>
+      <select id="kitSel" title="Active product kit — everything product-specific lives in kits/<name>/"></select>
+    </div>
+    <button class="secondary" id="newKitBtn" onclick="openNewKit()" title="Onboard a new product from its website">New product</button>
+    <button class="secondary" id="crmBtn" onclick="toggleCRM()">CRM view</button>
+    <a href="/api/export.csv" id="csvLink"><button class="secondary">Export CSV</button></a>
+    <span class="model-badge" id="modelBadge"></span>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <div class="section-card card">
+      <div class="section-marker">
+        <span class="marker-num">01</span>
+        <span class="marker-title">New Mission</span>
+      </div>
+      <form id="discForm">
+        <h2>Discover schools</h2>
+        <input id="dCity" list="cities" placeholder="City" required>
+        <datalist id="cities">
+          <option>Hyderabad</option><option>Bangalore</option>
+          <option>Visakhapatnam</option><option>Vijayawada</option>
+        </datalist>
+        <input id="dFocus" placeholder="Focus (default: private CBSE + State schools)">
+        <button type="submit" id="discBtn">Find & rank prospects</button>
+        <p class="hint">Searches real ranking/list pages, extracts schools, scores them — you pick who to pursue.</p>
+      </form>
+      <form id="addForm" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule);">
+        <h2>Add a school manually</h2>
+        <input id="fName" placeholder="School name" required>
+        <input id="fCity" placeholder="City" required>
+        <input id="fSite" placeholder="Website (optional)">
+        <button type="submit" id="addBtn">Research live</button>
+        <p class="hint" id="addHint">Runs real web search + scrapes the school's site, then scores fit.</p>
+      </form>
+    </div>
+    <div class="queue-head">
+      <span class="marker-num">02</span>
+      <span class="marker-title">Queue</span>
+    </div>
+    <div id="pipeline"></div>
+  </aside>
+
+  <section id="detail" class="card">
+    <p class="empty">Add a school or select one from the pipeline.</p>
+  </section>
+</main>
+
+<div id="toast"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

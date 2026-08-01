@@ -1,0 +1,993 @@
+/* ==========================================================================
+   GTM AGENT OPERATING SYSTEM — DESIGN SYSTEM
+   Visual Language: Claude Design Export (v3 Editorial Workspace)
+   Typography: Chivo, Chivo Mono, Geist
+   Palette: Graphite & Warm Mustard Gold (#c9a227)
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Surfaces */
+  --bg: #0e1117;
+  --panel: #161922;
+  --panel2: #1c202c;
+  --wash: #222736;
+  --border: #262c3a;
+  --rule: #262c3a;
+
+  /* Typography Colors */
+  --text: #f0f2f8;
+  --ink: #f0f2f8;
+  --muted: #848e9c;
+  --dim: #848e9c;
+
+  /* Brand & Accent Tokens */
+  --accent: #c9a227;
+  --accent-ink: #191400;
+  --accent-text: #e5c04b;
+
+  /* Semantic Feedback */
+  --green: #4ade80;
+  --good: #4ade80;
+  --blue: #60a5fa;
+  --red: #f87171;
+
+  /* Font Stacks */
+  --font-stack: 'Chivo', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Chivo Mono', monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Global Layout & Typography
+   -------------------------------------------------------------------------- */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.55 var(--font-stack);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-stack);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+  transition: opacity 130ms ease;
+}
+a:hover {
+  opacity: 0.85;
+  text-decoration: underline;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   Header & GTM Brain Selector
+   -------------------------------------------------------------------------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  border-bottom: 2px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brand-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+#appTitle {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.desk-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--panel2);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.sub {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.gtm-brain-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  padding: 2px 10px 2px 12px;
+  border-radius: 6px;
+  transition: border-color 150ms ease;
+}
+.gtm-brain-select:hover {
+  border-color: var(--accent);
+}
+
+.brain-label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--accent-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+#kitSel {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-stack);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 6px;
+  outline: none;
+}
+#kitSel option {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.model-badge {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+  background: var(--panel2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+#crmBtn.on {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Main Grid Layout & Section Markers
+   -------------------------------------------------------------------------- */
+main {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px 28px;
+  align-items: start;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-marker, .queue-head {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.marker-num {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.marker-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.card h2 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Form Elements & Buttons
+   -------------------------------------------------------------------------- */
+input, textarea, select {
+  width: 100%;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  font: inherit;
+  transition: border-color 130ms ease, box-shadow 130ms ease;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.15);
+}
+
+button {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font: 600 13px/1 var(--font-stack);
+  cursor: pointer;
+  transition: filter 130ms ease, transform 100ms ease, background 130ms ease;
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+button.secondary {
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+button.secondary:hover {
+  background: var(--wash);
+  border-color: var(--accent-text);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  font-size: 12px;
+  padding: 6px 8px;
+  font-weight: 500;
+}
+
+button.ghost:hover {
+  color: var(--text);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  margin-top: 6px;
+}
+
+.empty {
+  color: var(--muted);
+  padding: 48px 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Pipeline School Cards
+   -------------------------------------------------------------------------- */
+.school-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  margin-bottom: 8px;
+}
+
+.school-card:hover {
+  background: var(--wash);
+  border-left-color: var(--accent-text);
+}
+
+.school-card.active {
+  background: var(--wash);
+  border-color: var(--accent);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.school-card .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.school-card b {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.school-card .city {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.score-pill {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  background: var(--panel2);
+}
+
+.score-hi {
+  color: var(--green);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(74, 222, 128, 0.08);
+}
+.score-mid {
+  color: var(--accent-text);
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  background: rgba(201, 162, 39, 0.08);
+}
+.score-lo {
+  color: var(--red);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.status-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 4px;
+  margin-top: 8px;
+  background: var(--panel2);
+  color: var(--blue);
+  border: 1px solid var(--border);
+}
+
+.status-responded, .status-meeting_done {
+  color: var(--green);
+  border-color: rgba(74, 222, 128, 0.35);
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.status-mou_drafted, .status-signed {
+  color: var(--accent-text);
+  border-color: rgba(201, 162, 39, 0.35);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   Detail Area & Editorial Progression Tabs
+   -------------------------------------------------------------------------- */
+.detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 14px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 18px;
+  margin-bottom: 16px;
+}
+
+.detail-head h2 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.detail-head a {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--blue);
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin: 18px 0 20px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 130ms ease;
+}
+
+.tabs button:hover {
+  color: var(--text);
+  border-bottom-color: var(--muted);
+}
+
+.tabs button.on {
+  background: transparent;
+  color: var(--text);
+  border-bottom: 2px solid var(--accent);
+}
+
+.tabpane {
+  animation: fade 200ms ease;
+}
+@keyframes fade {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Scorebar, Verdict Scorecard & Hooks
+   -------------------------------------------------------------------------- */
+.scorebar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.scorebar .sc {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  text-align: center;
+}
+
+.sc b {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.sc span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-top: 6px;
+}
+
+.verdict {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 16px 0;
+}
+
+.verdict-col {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-content: flex-start;
+}
+
+.verdict-col h4 {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chip {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 14px;
+  border: 1px solid;
+  line-height: 1.4;
+  font-weight: 500;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.chip-yes {
+  color: var(--green);
+  border-color: rgba(74, 222, 128, 0.35);
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.chip-no {
+  color: var(--red);
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.hooks {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  display: grid;
+  gap: 8px;
+}
+
+.hooks li {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.angle-box {
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 14px 0;
+}
+
+.angle-box b {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--accent-text);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.angle-box p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 8px 16px;
+  font-size: 13.5px;
+  margin: 16px 0;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 18px;
+}
+
+.kv dt {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.kv dd {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Human Review Gate & Rejection Workflow
+   -------------------------------------------------------------------------- */
+.gate {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  margin: 14px 0;
+  color: var(--accent-ink);
+  box-shadow: 0 4px 14px rgba(201, 162, 39, 0.18);
+}
+
+.gate b {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 12px;
+  display: inline-block;
+  margin-bottom: 4px;
+  color: var(--accent-ink);
+}
+
+.gate label {
+  font-size: 13px;
+  color: var(--accent-ink);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.gate input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  accent-color: #191400;
+}
+
+.gate textarea {
+  background: #191400;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 8px 0;
+  font-family: var(--font-stack);
+}
+.gate textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.gate button {
+  background: #191400;
+  color: var(--accent);
+  border: 1px solid #191400;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 4px;
+}
+.gate button:hover {
+  filter: brightness(1.2);
+}
+
+.gate button.ghost {
+  background: transparent;
+  color: var(--accent-ink);
+  border: 1px solid var(--accent-ink);
+}
+.gate button.ghost:hover {
+  background: rgba(25, 20, 0, 0.1);
+}
+
+/* --------------------------------------------------------------------------
+   Follow-Up Sequence Cards
+   -------------------------------------------------------------------------- */
+.followup {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  transition: border-color 150ms ease;
+}
+
+.followup .fh {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.followup .angle {
+  color: var(--accent-text);
+  font-weight: 600;
+  text-transform: none;
+}
+
+.followup.sent {
+  border-left: 3px solid var(--green);
+  background: rgba(74, 222, 128, 0.04);
+}
+
+.btnrow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+/* --------------------------------------------------------------------------
+   Markdown Deliverables (Deck, Meeting Brief, MOU)
+   -------------------------------------------------------------------------- */
+.md {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin-top: 14px;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.md h1 {
+  font-size: 20px;
+  margin: 14px 0 10px;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.md h2 {
+  font-size: 16px;
+  margin: 14px 0 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.md table {
+  border-collapse: collapse;
+  margin: 12px 0;
+  width: 100%;
+}
+
+.md td, .md th {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.md th {
+  background: var(--panel);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.md blockquote {
+  border-left: 3px solid var(--accent);
+  background: rgba(201, 162, 39, 0.06);
+  padding: 10px 14px;
+  margin: 12px 0;
+  border-radius: 0 4px 4px 0;
+  color: var(--text);
+}
+
+.md ul, .md ol {
+  margin-left: 20px;
+  margin-bottom: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   Activity Timeline Log
+   -------------------------------------------------------------------------- */
+.log {
+  margin-top: 24px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.log h3 {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.log div {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(38, 44, 58, 0.5);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--font-mono);
+}
+
+.log b {
+  color: var(--text);
+  font-family: var(--font-stack);
+  font-weight: 500;
+  font-size: 13.5px;
+}
+
+/* --------------------------------------------------------------------------
+   CRM Table View
+   -------------------------------------------------------------------------- */
+table.crm {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+table.crm th {
+  text-align: left;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border);
+  background: var(--panel);
+  position: sticky;
+  top: 0;
+}
+
+table.crm td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+table.crm tr:hover td {
+  background: var(--wash);
+}
+
+table.crm b {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Toast Notification & Spinner
+   -------------------------------------------------------------------------- */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--panel2);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 14px 20px;
+  display: none;
+  max-width: 400px;
+  font-size: 13.5px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  z-index: 100;
+}
+
+.spin {
+  display: inline-block;
+  animation: rot 1s linear infinite;
+}
+
+@keyframes rot {
+  to { transform: rotate(360deg); }
+}
+
+label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+  display: block;
+  margin: 10px 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  .scorebar, .verdict {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .scorebar, .verdict {
+    grid-template-columns: 1fr;
+  }
+}
