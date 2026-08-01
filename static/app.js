@@ -53,7 +53,7 @@ function renderPipeline() {
   }).join('') || '<p class="hint" style="padding:0 4px">Pipeline is empty.</p>';
 }
 
-function select(id) { selected = schools.find(s => s.id === id); discovery = null; activeTab = 'dossier'; rejecting = null; renderPipeline(); renderDetail(); }
+function select(id) { selected = schools.find(s => s.id === id); discovery = null; activeTab = 'dossier'; rejecting = null; renderPipeline(); renderDetail(); syncHash(); }
 
 // ---- reject & redo (review gate failure path) ----
 let rejecting = null; // { target: 'email'|'whatsapp'|'followup:N'|'deck'|'mou', label }
@@ -142,7 +142,7 @@ async function deepResearch(i) {
 function tabBtn(key, label) {
   return `<button class="${activeTab === key ? 'on' : ''}" onclick="setTab('${key}')">${label}</button>`;
 }
-function setTab(k) { activeTab = k; rejecting = null; renderDetail(); }
+function setTab(k) { activeTab = k; rejecting = null; renderDetail(); syncHash(); }
 
 function renderDetail() {
   const el = $('detail');
@@ -309,13 +309,13 @@ function renderPane() {
   } else if (activeTab === 'meeting') {
     pane.innerHTML = `
       ${!s.meeting_brief ? `
-        <label>Simulate the school replying (paste any reply)</label>
-        <textarea id="replyText">Thanks for reaching out. This sounds interesting — our teachers do spend a lot of time on corrections. Can you tell me more about pricing and how you handle our syllabus? — Principal</textarea>
+        <label>School reply (paste the email / WhatsApp reply or call notes)</label>
+        <textarea id="replyText" placeholder="Paste what the school said — an email reply, WhatsApp message, or notes from the call…"></textarea>
         <button onclick="simReply()">Reply received → generate meeting brief</button>
-        <p class="hint">Fires the stop condition (halts follow-ups) and auto-prepares the meeting brief.</p>`
+        <p class="hint">Logging a reply halts all remaining follow-ups automatically and prepares the meeting brief.</p>`
       : `<h3 style="font-size:15px">Meeting brief</h3><div class="md">${md(s.meeting_brief)}</div>`}
       ${s.meeting_brief && !s.transcript_summary ? `
-        <label style="margin-top:14px">After the meeting: paste transcript (demo: fake transcript is fine)</label>
+        <label style="margin-top:14px">After the meeting: paste the transcript or call notes</label>
         <textarea id="transcriptText" style="min-height:120px" placeholder="Paste meeting transcript..."></textarea>
         <button onclick="sumTranscript()">Summarize → commitments + tracker update</button>` : ''}
       ${s.transcript_summary ? `<h3 style="font-size:15px;margin-top:14px">Post-meeting summary</h3><div class="md">${md(s.transcript_summary)}</div>` : ''}`;
@@ -338,9 +338,43 @@ function renderPane() {
 // ---- CRM table view ----
 let crmMode = false;
 
-function toggleCRM() { crmMode = !crmMode; $('crmBtn').classList.toggle('on', crmMode); crmMode ? renderCRM() : renderDetail(); }
+function toggleCRM() { crmMode = !crmMode; $('crmBtn').classList.toggle('on', crmMode); crmMode ? renderCRM() : renderDetail(); syncHash(); }
 
 function crmSelect(id) { crmMode = false; $('crmBtn').classList.remove('on'); select(id); }
+
+// ---- URL hash routing — pin a school+stage to a real browser tab (#/school/<id>/<tab>, #/crm) ----
+let _lastWrittenHash = null;
+
+function syncHash() {
+  const h = crmMode ? '#/crm' : selected ? `#/school/${selected.id}/${activeTab}` : '';
+  _lastWrittenHash = h;
+  if (location.hash !== h) history.replaceState(null, '', h || location.pathname + location.search);
+}
+
+async function routeFromHash() {
+  const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+  if (parts[0] === 'school' && parts[1]) {
+    try {
+      const s = await api(`/api/schools/${parts[1]}`);
+      activeKitName = s.kit || activeKitName;         // per-tab override — filters this tab's sidebar only
+      await refresh(false);
+      selected = schools.find(x => x.id === s.id) || s;
+      activeTab = parts[2] || 'dossier';
+      rejecting = null; crmMode = false;
+      $('crmBtn')?.classList.remove('on');
+      const sel = $('kitSel');
+      if (sel && [...sel.options].some(o => o.value === activeKitName)) sel.value = activeKitName;
+      renderPipeline(); renderDetail();
+      return true;
+    } catch (err) { toast(`Couldn't load pinned school: ${esc(err.message)}`, 6000); }
+  } else if (parts[0] === 'crm') {
+    crmMode = true; $('crmBtn')?.classList.add('on'); renderCRM();
+    return true;
+  }
+  return false;
+}
+
+window.addEventListener('hashchange', () => { if (location.hash !== _lastWrittenHash) routeFromHash(); });
 
 function renderCRM() {
   const el = $('detail');
@@ -516,6 +550,7 @@ $('kitSel').addEventListener('change', async e => {
     selected = null;
     await refresh(false);
     if (crmMode) renderCRM(); else renderDetail();
+    syncHash();
     toast('Kit switched — pipeline, discovery, scoring, outreach, decks & MOUs now scoped to this product only');
   } catch (err) { toast(`${esc(err.message)}`, 6000); }
 });
@@ -524,6 +559,8 @@ $('kitSel').addEventListener('change', async e => {
   try { const c = await api('/api/config'); $('modelBadge').textContent = `${c.model} via OpenRouter`; } catch {}
   try { await loadKits(); } catch {}
   await refresh(false);
-  // land on the CRM overview when a pipeline exists — no school pre-selected
-  if (schools.length) { crmMode = true; $('crmBtn').classList.add('on'); renderCRM(); }
+  const routed = location.hash ? await routeFromHash() : false;
+  // no pinned hash — land on the CRM overview when a pipeline exists, no school pre-selected
+  if (!routed && schools.length) { crmMode = true; $('crmBtn').classList.add('on'); renderCRM(); }
+  _lastWrittenHash = location.hash;
 })();
