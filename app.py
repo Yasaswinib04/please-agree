@@ -2,6 +2,7 @@
 import csv
 import io
 import json
+import os
 import re
 import threading
 import uuid
@@ -17,12 +18,15 @@ import llm
 import research
 
 BASE = Path(__file__).parent
-DATA = BASE / "data"
+# DATA_DIR lets the pipeline live on a mounted persistent disk. Hosts with an ephemeral
+# filesystem (e.g. Render's free plan) reset the default path on every deploy and cold
+# start, which silently empties the pipeline — point DATA_DIR at a real disk to survive.
+DATA = Path(os.environ.get("DATA_DIR") or (BASE / "data"))
 DECKS = DATA / "decks"
 KITS = BASE / "kits"
 SETTINGS_FILE = DATA / "settings.json"
-DATA.mkdir(exist_ok=True)
-DECKS.mkdir(exist_ok=True)
+DATA.mkdir(parents=True, exist_ok=True)
+DECKS.mkdir(parents=True, exist_ok=True)
 DB_FILE = DATA / "schools.json"
 _lock = threading.Lock()
 

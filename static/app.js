@@ -13,11 +13,28 @@ function toast(msg, ms = 3500) {
   clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', ms);
 }
 
+// The server restarted and lost its pipeline while this tab stayed open, so everything on
+// screen is a ghost of data the server no longer has. Say so plainly and resync the tab.
+const STALE_MSG = 'This school is gone from the server — it restarted and cleared the pipeline, '
+  + 'so what was on screen was only left over in this tab. Re-run the research to continue.';
+let _resyncing = false;
+
+async function resyncAfterServerReset() {
+  if (_resyncing) return;
+  _resyncing = true;
+  try {
+    selected = null; discovery = null; rejecting = null;
+    await refresh(false);
+    if (crmMode) renderCRM(); else renderDetail();
+  } catch {} finally { _resyncing = false; }
+}
+
 async function api(path, opts = {}) {
   const r = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...opts });
   if (!r.ok) {
     let msg = r.statusText;
     try { msg = (await r.json()).detail || msg; } catch {}
+    if (r.status === 404 && /school not found/i.test(msg)) { resyncAfterServerReset(); msg = STALE_MSG; }
     throw new Error(msg);
   }
   return r.json();
@@ -473,25 +490,26 @@ function renderCRM() {
 
 function copyText(t) { navigator.clipboard.writeText(t); toast('Copied ✓'); }
 
+// Returns false when the action failed, so callers never announce success over an error toast.
 async function act(btnLabel, fn) {
-  try { await fn(); await refresh(); }
-  catch (err) { toast(`${esc(err.message)}`, 6000); }
+  try { await fn(); await refresh(); return true; }
+  catch (err) { toast(`${esc(err.message)}`, 8000); return false; }
 }
 
 async function genOutreach() {
   const persona = $('ePersona')?.value || null;
   toast('Drafting personalized outreach + 7 follow-up angles… <span class="spin"></span>', 60000);
-  await act('outreach', () => api(`/api/schools/${selected.id}/outreach`, { method: 'POST', body: JSON.stringify({ persona }) }));
-  activeTab = 'outreach'; toast('Outreach drafted — review before sending');
+  if (!await act('outreach', () => api(`/api/schools/${selected.id}/outreach`, { method: 'POST', body: JSON.stringify({ persona }) }))) return;
+  activeTab = 'outreach'; renderDetail(); toast('Outreach drafted — review before sending');
 }
 async function approveOutreach() {
-  await act('approve', () => api(`/api/schools/${selected.id}/approve`, { method: 'POST', body: JSON.stringify({
-    email_subject: $('eSubj').value, email_body: $('eBody').value, whatsapp: $('eWa').value }) }));
+  if (!await act('approve', () => api(`/api/schools/${selected.id}/approve`, { method: 'POST', body: JSON.stringify({
+    email_subject: $('eSubj').value, email_body: $('eBody').value, whatsapp: $('eWa').value }) }))) return;
   toast('Approved — first touch marked sent');
 }
 async function prepareFollowup() {
   toast('Drafting this touch from the live conversation — sent touches, replies, meeting notes… <span class="spin"></span>', 60000);
-  await act('prepare', () => api(`/api/schools/${selected.id}/followup/prepare`, { method: 'POST' }));
+  if (!await act('prepare', () => api(`/api/schools/${selected.id}/followup/prepare`, { method: 'POST' }))) return;
   toast('Drafted just-in-time — review it, then send');
 }
 async function sendFollowup() {
@@ -499,22 +517,22 @@ async function sendFollowup() {
 }
 async function simReply() {
   toast('Reply received — halting follow-ups, preparing meeting brief… <span class="spin"></span>', 60000);
-  await act('reply', () => api(`/api/schools/${selected.id}/simulate_reply`, { method: 'POST', body: JSON.stringify({ text: $('replyText').value }) }));
+  if (!await act('reply', () => api(`/api/schools/${selected.id}/simulate_reply`, { method: 'POST', body: JSON.stringify({ text: $('replyText').value }) }))) return;
   toast('Meeting brief ready');
 }
 async function sumTranscript() {
   toast('Summarizing transcript… <span class="spin"></span>', 60000);
-  await act('transcript', () => api(`/api/schools/${selected.id}/transcript`, { method: 'POST', body: JSON.stringify({ text: $('transcriptText').value }) }));
+  if (!await act('transcript', () => api(`/api/schools/${selected.id}/transcript`, { method: 'POST', body: JSON.stringify({ text: $('transcriptText').value }) }))) return;
   toast('Summary + commitments extracted');
 }
 async function genDeck() {
   toast('Designing the deck for this school… (30-60s) <span class="spin"></span>', 90000);
-  await act('deck', () => api(`/api/schools/${selected.id}/deck`, { method: 'POST' }));
+  if (!await act('deck', () => api(`/api/schools/${selected.id}/deck`, { method: 'POST' }))) return;
   toast('Deck ready');
 }
 async function genMou() {
   toast('Drafting MOU from clause library… <span class="spin"></span>', 60000);
-  await act('mou', () => api(`/api/schools/${selected.id}/mou`, { method: 'POST', body: JSON.stringify({ commercial_terms: $('mouTerms') ? $('mouTerms').value || null : null }) }));
+  if (!await act('mou', () => api(`/api/schools/${selected.id}/mou`, { method: 'POST', body: JSON.stringify({ commercial_terms: $('mouTerms') ? $('mouTerms').value || null : null }) }))) return;
   toast('MOU drafted — pending human + legal review');
 }
 async function removeSchool(id) {
