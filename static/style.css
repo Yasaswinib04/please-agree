@@ -644,10 +644,28 @@ button.ghost:hover {
 .scorebar .sc {
   background: transparent;
   border: 0;
-  border-top: 3px solid var(--accent);
   border-radius: 0;
-  padding: 8px 0 4px;
+  padding: 0 0 4px;
   text-align: left;
+}
+
+.sc .sc-bar {
+  display: block;
+  height: 3px;
+  margin: 0 0 8px;
+  background: var(--wash);
+  overflow: hidden;
+}
+
+.sc .sc-bar span {
+  display: block;
+  height: 100%;
+  margin: 0;
+  background: var(--accent);
+}
+
+.sc .sc-bar .sc-fill-lo {
+  background: rgba(201, 162, 39, 0.5);
 }
 
 .sc b {

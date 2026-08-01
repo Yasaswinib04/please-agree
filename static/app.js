@@ -176,7 +176,10 @@ function renderPane() {
     const dims = Object.entries(sc).filter(([k, v]) => typeof v === 'number' && k !== 'overall');
     pane.innerHTML = `
       <div class="scorebar">
-        ${dims.map(([k, v]) => `<div class="sc"><b>${v ?? '–'}</b><span>${esc(k.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()))} /25</span></div>`).join('')}
+        ${dims.map(([k, v]) => {
+          const pct = Math.max(3, Math.min(100, Math.round(((v ?? 0) / 25) * 100)));
+          return `<div class="sc"><span class="sc-bar"><span class="${pct >= 80 ? '' : 'sc-fill-lo'}" style="width:${pct}%"></span></span><b>${v ?? '–'}</b><span>${esc(k.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()))} /25</span></div>`;
+        }).join('')}
       </div>
       ${s.kit ? `<p class="hint" style="margin:4px 0 0">Scored by kit: <b>${esc(s.product || s.kit)}</b> — dimensions come from kits/${esc(s.kit)}/scoring.json</p>` : ''}
       ${(sc.strengths || sc.concerns) ? `
