@@ -302,7 +302,7 @@ function renderPane() {
         <button class="ghost" onclick="openReject('deck', 'pitch deck')">✗ Reject with feedback</button>` : ''}
       </div>
       ${rejectPanel()}
-      ${s.deck_path ? `<iframe src="${s.deck_path}" style="width:100%;height:520px;border:1px solid var(--border);border-radius:10px;background:#000"></iframe>` : '<p class="hint">A 6-slide first-pitch deck built from this school\'s dossier — different for every school.</p>'}`;
+      ${s.deck_path ? `<iframe src="${s.deck_path}" style="width:100%;height:520px;border:1px solid var(--rule);border-radius:0;background:#000"></iframe>` : '<p class="hint">A 6-slide first-pitch deck built from this school\'s dossier — different for every school.</p>'}`;
   } else if (activeTab === 'meeting') {
     pane.innerHTML = `
       ${!s.meeting_brief ? `
@@ -479,7 +479,7 @@ async function buildKit() {
             ${['primary', 'accent', 'bg'].filter(k => b[k]).map(k => `<span class="chip" style="border-color:${esc(b[k])};color:${esc(b[k])}">${esc(k)} ${esc(b[k])}</span>`).join('')}
           </div>
           <div class="hint" style="width:100%">Font: <b>${esc(b.font || '–')}</b> · Vibe: ${esc(b.vibe || '–')}</div>
-          ${b.logo ? `<img src="${esc(b.logo)}" alt="" style="max-height:34px;max-width:100%;margin-top:6px;background:#fff;border-radius:6px;padding:4px" onerror="this.remove()">` : ''}
+          ${b.logo ? `<img src="${esc(b.logo)}" alt="" style="max-height:34px;max-width:100%;margin-top:6px;background:#fff;border-radius:0;padding:4px" onerror="this.remove()">` : ''}
         </div>
         <div class="verdict-col"><h4>Built from</h4>
           ${(r.sources || []).map(u => `<div class="hint" style="width:100%"><a href="${esc(u)}" target="_blank">${esc(u)}</a></div>`).join('')}
